@@ -1,90 +1,92 @@
-import React, { useEffect, useState } from 'react';
-import { Col, Container, Form, ListGroup, Row } from 'react-bootstrap';
-import BrowserLocation from './BrowserLocation';
-
+import React, { useEffect, useState } from 'react'
+import { Button, Card, Container, Image } from 'react-bootstrap'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import "./MainPage.css"
+//import forcastImages from "./forcastImages.json"
+import { parseISO, format } from 'date-fns'
 
 const CurrentLocation = () => {
-    const [weather, setWeather] = useState(null)
-    const [location, setLocation] = useState('')
-
-    //const location = "london"
-    const searchUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${location}&appid=8d45afb7921fd74c51f9b550de32fce8`
-
-    const handleChange = (e) => {
-        setLocation(e.target.value)
-    }
-    // Fetch data ---------------------------------
-    const fetchData = async (searchUrl) => {
+    const [currentLocation, setSetCurrentLocation] = useState(null)
+    const navigate = useNavigate()
+    const url = `https://api.openweathermap.org/data/2.5/forecast?q=padova&appid=8d45afb7921fd74c51f9b550de32fce8&units=imperial`
+    const fetchData = async (url) => {
         try {
-            const response = await fetch(searchUrl)
+            const response = await fetch(url)
             if (!response.ok) {
                 alert('Error fetching results')
                 return
             }
             const data = await response.json()
-            setWeather(data)
+            setSetCurrentLocation(data)
         } catch (error) {
             console.log(error);
         }
-        return searchUrl
+        return url
     }
-    // Search forcast by location-------------------
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        fetchData(searchUrl)
-    }
+    const fahrenheitToCelsius = fahrenheit => parseInt((fahrenheit - 32) * 5 / 9);
+    // const linkToPage = (cityName) => {
+    //     navigate(`/fullWeather/:${cityName}`.toLowerCase())
+    //     return cityName
+    // }
     useEffect(() => {
-        // console.log("data : " + data.city.name)
-        // console.log("location : " + location)
-    }, [weather, location])
-
+        fetchData(url)
+    }, [])
     return (
-        <Container>
-            <Row xs={10} className="mt-5">
+        <Container className='main-container'>
+            {currentLocation !== null &&
+                <Card className='card'>
+                    <div className='card-container'>
+                        <Card.Img
+                            src="https://cdn.pixabay.com/photo/2017/05/20/20/22/clouds-2329680_960_720.jpg"
+                            alt="Card image"
+                            className='card-image'
+                        />
+                    </div>
+                    <Card.ImgOverlay className="text-white p-0">
+                        <div className='card-content'>
+                            <div className='card-text-content'>
+                                <h1>{currentLocation.city.name} {currentLocation.city.country}</h1>
+                                <h2>{fahrenheitToCelsius(currentLocation.list[0].main.temp)}°C</h2>
+                                <div className='card-icon-content'>
+                                    <h3 style={{ marginRight: "55px" }}>{currentLocation.list[0].weather[0].main}</h3>
+                                    <Image className='main-weather-icon'
+                                        src={`http://openweathermap.org/img/wn/${currentLocation.list[0].weather[0].icon}@2x.png`} />
+                                </div>
+                                {/* <Button onClick={linkToPage(currentLocation.city.name)}> More Details</Button> */}
+                            </div>
 
-                <Form style={{ flexGrow: '1', display: "flex", alignItems: "center" }} onSubmit={handleSubmit}>
-                    <Form.Label style={{ fontSize: "35px", fontWeight: "bold", marginRight: "10px" }}>WEATHER</Form.Label>
-                    <Form.Control
-                        type="search"
-                        value={location}
-                        onChange={handleChange}
-                        placeholder="type and press Enter"
-                    />
-                </Form>
-            </Row>
-            <Row xs={10} className="mt-2">
-                <Col xs={5} className="bg-info">
-                    <BrowserLocation />
-                </Col>
-                <Col xs={7} className="bg-info">
-                    {weather !== null &&
-                        <ListGroup>
+                            {/* <Card.Text>Last updated 3 mins ago</Card.Text> */}
+                            <Container className='sub-container'>
+                                {currentLocation !== null && currentLocation.list.map((item, i) => (
+                                    <Card key={i} className="single-card">
+                                        {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
+                                        <Card.Body className='card-body'>
+                                            <small>{format(parseISO(item.dt_txt), 'do MMMM yyyy')}</small><br></br>
+                                            <small>Time : {format(parseISO(item.dt_txt), 'HH:mm')}</small>
 
-                            <ListGroup.Item>{weather.city.name}</ListGroup.Item>
-                            <ListGroup.Item>{weather.city.country}</ListGroup.Item>
-                            <ListGroup.Item>{weather.city.timezone}</ListGroup.Item>
-                            <ListGroup.Item>{weather.cnt}°F</ListGroup.Item>
-
-                        </ListGroup>}
-
-                    <ListGroup>
-                        {weather !== null && weather.list.map((item, i) => (
-                            <ListGroup.Item key={i}>
-                                <span>Item dt : {item.dt}--</span>
-                                <span>Wind Speed : {item.wind.speed}</span>
-                                <span>{item.dt}</span>
-                            </ListGroup.Item>
-                        ))}
-                    </ListGroup>
-                </Col>
-            </Row>
+                                            <div className='card-weather-container '>
+                                                <Card.Text>{item.weather[0].main}</Card.Text>
+                                                <Image className='card-weather-icon'
+                                                    src={`http://openweathermap.org/img/wn/${item.weather[0].icon}@2x.png`} />
+                                            </div>
+                                            <p>{fahrenheitToCelsius(item.main.temp)}°C</p>
+                                            <small>Wind S : {item.wind.speed}</small>
 
 
-        </Container>
-    );
+                                        </Card.Body>
+                                    </Card>
+                                ))}
+                            </Container>
+                        </div>
 
+                    </Card.ImgOverlay>
+
+                </Card>
+            }
+
+        </Container >
+
+    )
 }
-
-
 
 export default CurrentLocation

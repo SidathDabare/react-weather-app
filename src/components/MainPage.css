@@ -1,0 +1,109 @@
+/** @format */
+
+.main-container {
+  padding: 0px;
+  margin: 0;
+}
+.left-container {
+  width: 70%;
+}
+.card {
+  padding: 0;
+}
+.card-container {
+  max-height: 400px;
+  width: 100%;
+  padding: 0 0;
+  background-size: cover;
+  overflow: hidden;
+}
+.card-image {
+  min-height: 400px;
+  min-width: 100%;
+  object-fit: cover;
+}
+.card-content {
+  background: linear-gradient(
+    267deg,
+    rgba(12, 42, 62, 0.66) 0%,
+    rgba(255, 255, 255, 0) 35%
+  );
+  padding: 10px 10px;
+  height: 400px;
+  text-align: right;
+}
+.card-text-content {
+  height: 210px;
+  padding: 20px 50px;
+}
+.card-icon-content {
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  position: relative;
+}
+.main-weather-icon {
+  position: absolute;
+  height: 60px;
+  top: -20px;
+}
+.sub-container {
+  display: flex;
+  overflow-x: scroll;
+  max-height: 200px;
+  padding: 0;
+}
+.sub-container::-webkit-scrollbar {
+  height: 12px; /* width of the entire scrollbar */
+}
+.sub-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0); /* color of the tracking area */
+}
+.sub-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 92, 104, 0.785); /* color of the scroll thumb */
+  border-radius: 20px; /* roundness of the scroll thumb */
+}
+.sub-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 181, 205, 0.981);
+  border-radius: 20px;
+}
+.single-card {
+  min-width: 130px;
+  height: 140px;
+  padding: 0;
+  background-color: rgba(0, 36, 61, 0.603);
+  margin: 10px 3px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease-in-out;
+}
+.single-card:hover {
+  transform: scale(1.1);
+  background-color: #002853c5;
+  /* box-shadow: -1px 1px 5px 5px #002841; */
+}
+.card-body {
+  padding: 5px 8px;
+  line-height: 1rem;
+}
+.card-body small:first-child {
+  font-weight: bold;
+}
+.card-weather-container {
+  margin-top: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  position: relative;
+  background: radial-gradient(
+    circle,
+    rgba(12, 42, 62, 1) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+.card-weather-icon {
+  position: absolute;
+  height: 60px;
+  top: -25px;
+  right: 0;
+}
